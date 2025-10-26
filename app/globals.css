@@ -27,7 +27,7 @@ body {
 }
 
 
-/* Custom scrollbar for better UX */
+/* nn Custom scrollbar for better UX */
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;
 }

@@ -13,7 +13,7 @@ export async function POST(request: Request) {
         message: message
       }),
     });
-
+    //check for response.ok
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
     }

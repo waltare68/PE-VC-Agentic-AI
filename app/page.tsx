@@ -6,7 +6,7 @@ interface Message {
   sender: 'user' | 'bot';
   timestamp: Date;
 }
-
+// Main Home Component
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>('');
@@ -109,7 +109,7 @@ export default function Home() {
             Ask about SAFE agreements, term sheets, and venture capital terminology
           </p>
         </div>
-      </div>
+      </div>   
 
       {/* Chat Container */}
       <div className="max-w-4xl mx-auto px-4 py-8">
