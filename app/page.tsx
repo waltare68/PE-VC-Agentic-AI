@@ -6,7 +6,7 @@ interface Message {
   sender: 'user' | 'bot';
   timestamp: Date;
 }
-// Main Home Component
+//Main Home Component
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>('');

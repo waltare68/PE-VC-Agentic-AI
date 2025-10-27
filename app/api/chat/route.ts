@@ -4,7 +4,7 @@ export async function POST(request: Request) {
   try {
     const { message } = await request.json();
 
-    const response = await fetch('https://uumajrrxg8.execute-api.us-east-1.amazonaws.com/prod/chat', {
+    const response = await fetch('https://x0v4xoc50l.execute-api.eu-north-1.amazonaws.com/prod', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
