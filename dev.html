@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bedrock Agent Chat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: #2d3748;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .messages-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f7fafc;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 70%;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background: #007bff;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.agent {
+            background: white;
+            color: #2d3748;
+            margin-right: auto;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 12px;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .input-container input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .input-container button {
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .input-container button:hover:not(:disabled) {
+            background: #0056b3;
+        }
+
+        .input-container button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>🤖 Bedrock Agent Chat</h1>
+        </div>
+        
+        <div class="messages-container" id="messagesContainer">
+            <div class="message agent">
+                Hello! I'm your Bedrock Agent assistant. Ask me anything!
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <input 
+                type="text" 
+                id="messageInput" 
+                placeholder="Type your message here..."
+            >
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script>
+        class BedrockAgentChat {
+            constructor() {
+                // USE YOUR EXACT API URL - this is critical
+                this.apiUrl = 'https://1554hvwm29.execute-api.us-east-1.amazonaws.com/dev/proxy';
+                this.messagesContainer = document.getElementById('messagesContainer');
+                this.messageInput = document.getElementById('messageInput');
+                this.sendButton = document.getElementById('sendButton');
+                
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                this.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendMessage();
+                    }
+                });
+            }
+
+            async sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message) return;
+
+                // Clear input and disable
+                this.messageInput.value = '';
+                this.messageInput.disabled = true;
+                this.sendButton.disabled = true;
+
+                // Add user message
+                this.addMessage('user', message);
+
+                try {
+                    console.log('Sending request to:', this.apiUrl);
+                    
+                    const response = await fetch(this.apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: message })
+                    });
+
+                    console.log('Response status:', response.status);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    console.log('Response data:', data);
+                    
+                    // Add agent response
+                    this.addMessage('agent', data.response);
+
+                } catch (error) {
+                    console.error('Full error:', error);
+                    this.addMessage('agent', 'Error: ' + error.message);
+                } finally {
+                    // Re-enable input
+                    this.messageInput.disabled = false;
+                    this.sendButton.disabled = false;
+                    this.messageInput.focus();
+                }
+            }
+
+            addMessage(type, content) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`;
+                messageDiv.textContent = content;
+                this.messagesContainer.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+
+            scrollToBottom() {
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+            }
+        }
+
+        // Initialize chat when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new BedrockAgentChat();
+        });
+    </script>
+</body>
+</html>

@@ -4,7 +4,8 @@ export async function POST(request: Request) {
   try {
     const { message } = await request.json();
 
-    const response = await fetch('https://5dgouhq5gc.execute-api.us-east-1.amazonaws.com/prod', {
+    // Use your new working API Gateway URL
+    const response = await fetch('https://1554hvwm29.execute-api.us-east-1.amazonaws.com/dev/proxy', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -13,18 +14,16 @@ export async function POST(request: Request) {
         message: message
       }),
     });
-    //check for response.ok
+
+    // Check for response.ok
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
     }
 
     const data = await response.json();
     
-    // Extract the actual response from the nested structure
-    const responseBody = JSON.parse(data.body);
-    const finalResponse = responseBody.response;
-    
-    return NextResponse.json({ response: finalResponse });
+    // Your new API returns the response directly, no need for nested parsing
+    return NextResponse.json({ response: data.response });
     
   } catch (error) {
     console.error('Chat API error:', error);
