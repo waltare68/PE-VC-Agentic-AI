@@ -106,7 +106,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 py-6">
           <h1 className="text-3xl font-bold text-gray-900">PE/VC Analyst Agent</h1>
           <p className="text-gray-600 mt-2">
-            Ask about SAFE agreements, term sheets, and venture capital terminology
+            Ask about venture capital terminology,Get Company Info and get Financial Data Analysis
           </p>
         </div>
       </div>   
@@ -120,7 +120,7 @@ export default function Home() {
               <div className="text-center text-gray-500 py-12">
                 <div className="text-4xl mb-4">💼</div>
                 <p className="text-lg font-medium">Welcome to your PE/VC Assistant</p>
-                <p className="mt-2">Ask about SAFE agreements, liquidation preferences, or venture capital terms</p>
+                <p className="mt-2">Ask about company data, term analysis, valuations, or venture capital terms</p>
               </div>
             )}
             
@@ -176,7 +176,7 @@ export default function Home() {
                   value={input}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Ask about SAFE agreements, liquidation preference, MFN clauses..."
+                  placeholder="Ask about company data, term analysis, valuations, or venture capital terms..."
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-white text-gray-900 placeholder-gray-500"
                   disabled={loading}
                 />
@@ -195,8 +195,14 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Example Questions */}
+        {/* Quick Question Buttons */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button
+            onClick={() => quickQuestion("Tell me about Tesla")}
+            className="p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-md transition-all text-left"
+          >
+            <div className="text-sm font-medium text-gray-900">🏢 Get Company Data</div>
+          </button>
           <button
             onClick={() => quickQuestion("What is a SAFE agreement?")}
             className="p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-md transition-all text-left"
@@ -210,10 +216,10 @@ export default function Home() {
             <div className="text-sm font-medium text-gray-900">Explain liquidation preference</div>
           </button>
           <button
-            onClick={() => quickQuestion("Difference between Valuation Cap and MFN SAFE")}
+            onClick={() => quickQuestion("Calculate valuation for a SaaS company with $1M revenue growing at 40%")}
             className="p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-500 hover:shadow-md transition-all text-left"
           >
-            <div className="text-sm font-medium text-gray-900">Valuation Cap vs MFN SAFE</div>
+            <div className="text-sm font-medium text-gray-900">Simple Saas Valuation</div>
           </button>
         </div>
       </div>
