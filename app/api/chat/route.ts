@@ -5,7 +5,7 @@ export async function POST(request: Request) {
     const { message } = await request.json();
 
     // Use your new working API Gateway URL
-    const response = await fetch('https://1554hvwm29.execute-api.us-east-1.amazonaws.com/dev/proxy', {
+    const response = await fetch('1https://1554hvwm29.execute-api.us-east-1.amazonaws.com/dev/proxy', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
